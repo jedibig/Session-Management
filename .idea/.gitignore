@@ -2,3 +2,23 @@
 /workspace.xml
 # Datasource local storage ignored files
 /dataSources/
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/classes/com/java/controller/AdminHomeServlet.class
+/../out/production/SessionManagement/com/java/controller/AdminHomeServlet.class
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/classes/com/java/core/Bill.class
+/../out/production/SessionManagement/com/java/core/Bill.class
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/classes/com/java/exception/DatabaseException.class
+/../out/production/SessionManagement/com/java/exception/DatabaseException.class
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/classes/com/java/dao/EBillDAO.class
+/../out/production/SessionManagement/com/java/dao/EBillDAO.class
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/classes/com/java/dao/EBillDAOImpl.class
+/../out/production/SessionManagement/com/java/dao/EBillDAOImpl.class
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/classes/com/java/service/EBillService.class
+/../out/production/SessionManagement/com/java/service/EBillService.class
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/classes/com/java/service/EBillServiceImpl.class
+/../out/production/SessionManagement/com/java/service/EBillServiceImpl.class
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/lib/log4j-1.2.17.jar
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/classes/com/java/exception/NoAccountFoundException.class
+/../out/production/SessionManagement/com/java/exception/NoAccountFoundException.class
+/../out/artifacts/SessionManagement_war_exploded/WEB-INF/classes/META-INF/SessionManagement.kotlin_module
+/../out/production/SessionManagement/META-INF/SessionManagement.kotlin_module
+/uiDesigner.xml

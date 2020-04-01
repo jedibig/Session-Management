@@ -31,8 +31,9 @@ public class LoginServlet extends HttpServlet {
             request.getSession().setAttribute("username", user.getUsername());
         } else {
             logger.info("Could not match password.");
-            String  respond = "<html>Invalid username/password combination! <a href=\"login.html\">Click here</a> to try again</html>";
+            String  respond = "<html>Invalid username/password combination! <a href='/SessionManagement'>Click here</a> to try again</html>";
             response.getWriter().write(respond);
+            return;
         }
 
         response.sendRedirect("calculatebill");

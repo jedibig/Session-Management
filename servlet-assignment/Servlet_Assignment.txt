@@ -1,0 +1,239 @@
+On a web page, display current date and time.
+
+Using JSP, we can use the scriplet tag to get the current date and time using LocalDateTime.now()
+
+Create a servlet called 'msgboard' in MessageBoardServlet.java. This servlet should present a HTML FORM where a user can enter its name and a message. Both the name and the message are appended to the page when the form is submitted. Invite the other students to add messages to your page. See if you can crash the other student's pages. Have fun!
+
+Hint: use doPost() for the form processing and doGet() for the page display Advanced: extend the Message Board to enable: making the messages persistent between runs of the server session tracking: a user enters its name only once and not with each message
+
+////////////
+
+Write a program that takes in student details and saves them to db. It also provides admin to download details in a json format
+
+///////////
+
+What is the difference between GET and POST method? What do you mean by an idempotent http method?
+
+GET is a request http protocol that does not have a body, whereas POST uses the encrypted body to send information with the request. Thus, GET request is limited to the number of url can be sent. Idempotent http method means that it will return the same result every time. It is also known as a safe method, meaning we don’t care about repetitive request from the client.
+
+What is the difference between the content-type set as part of the response and accept set as part of the request?
+
+Content-type set as part of the response means that the body of the response will have a content with the indicated type such as json, html, etc. 
+
+Accept set as part of the request means that the request is expecting a particular type from the response.
+
+What is the lifecycle of the servlet? Explain the difference between using the Servlet interface, HttpServlet class and GenericServlet
+
+After compilation and the server is deployed, when the first request come to a servlet, the web container will load the class, and create an instance of the class. Then, it will call the init() method of the servlet. After that, it will call the service method to process the request. For the next request and those after the first one, it will use the instance created in the first call and call the service method. When the servlet is closed/disposed, it will call its destroy() method.
+
+Servlet interface is an interface that contains method declaration needed for a servlet. GenericServlet is an abstract class that implements Servlet interface which has the init method definition, and is protocol independent. thus we needs to implements the service when we extends GenericServlet.
+HttpServlet is another abstract class that extends GenericServlet that has its service method implemented, to accept http requests. It also have method definition to handle http requests such as doGet(), doPost(), do
+
+What are the tasks performed by the servlet container?
+
+Servlet container is a web container which provides runtime environment and configuration to serve the servlets.
+
+Communication Support: Servlet Container provides easy way of communication between web client (Browsers) and the servlets and JSPs. Because of the container, we don’t need to build a server socket to listen for any request from the web client, parse the request and generate a response. All these important and complex tasks are done by container and all we need to focus is on business logic for the applications.
+Lifecycle and Resource Management: Servlet Container takes care of managing the life cycle of servlet. From the loading of servlets into memory, initializing servlets, invoking servlet methods and to destroy them. The container also provides utility like JNDI for resource pooling and management.
+Multithreading Support: Container creates a new thread for every request to the servlet and provides them request and response objects to the processing. So servlets are not initialized for each request and save time and memory.
+JSP Support: JSPs doesn’t look like normal java classes but every JSP in the application is compiled by container and converted to Servlet and then container manages them like other servlets.
+Miscellaneous Task: Servlet container manages the resource pool, perform memory optimizations, execute garbage collector, provides security configurations, support for multiple applications, hot deployment and several other tasks behind the scene that makes a developer life easier.
+
+When a request comes in and web server cannot provide the response right away, it will be sent to the container, which will process the request and send back a response. Some of the tasks of servlet container includes managing communication between web client and the web component (servlet and JSP), manage the lifecycle of a servlet, process incoming request by creating a new thread and provide request and response object, convert JSP to servlets, and other tasks that is required for a web application that developer does not need to write. 
+
+What do you mean by ServletContext and ServletConfig object?
+
+ServletContext is an object that contains configuration that is available to the whole application.
+ServletConfig is an abject that contains configuration that is available only to certain servlet scope.
+
+Q9) What is requestDispatcher? What is the difference between doing requestDispatcher.forward and response.sendRedirect
+
+requestDispatcher is used to forward the request to another resource that can be HTML, JSP or another servlet in the same application
+requestDispatcher.forward will forward the request internally from the server side, and it can forward request and response with it, whereas response.sendRedirect will send a response that will send a new request from the user.
+
+Q10)What is the difference between RequestDispatcher.forward and requestDispatcher.include?
+
+RequestDispatcher.forward will close the response outsream and forward the request, whereas include will keep the outstream opened, so it will include the content of the resource from the current response.
+
+Q11) How can we create deadlock situation in servlet?
+
+Deadlock situation in a servlet can happened by forwarding request to another servlet that forwards it back.
+
+Q12) If 100 requests come in at a time, how many servlet objects would be created? Are servlets thread-safe? How do you implement thread-safety?
+
+If 100 requests come in a time to the same servlet, only one servlet object will be created. Since the object instantiation and init method are only called once, it is thread-safe, however the service method will be called multiple times. So it is possible that the method would not be thread-safe. 
+
+If we have a shared resource among multiple thread we need to use synchronize as in regular java application or locks in order to maintain thread-safety.
+
+Q13) What do you mean by inter-servlet communication? How do we do that?
+
+Inter-servlet communication is a way for servlet in the same application to communicate with each other or to exchange data between servlet and share information. One way to achieve inter-servlet communication is using servlet attribute. ServletRequest, HttpSession, and ServletContext all has scope of request, session, and servlet, but all of them has get and set attribute method that can be used to perform this task.  
+
+Inter-servlet communication is achieved using RequestDispatcher. ServletRequest has a method called getRequestDispatcher() where we can forward the request and response to another servlet and retain information from the request. 
+
+Q14) What is url encoding? How do we do it for servlets?
+
+Url encoding is used to encode string that contains special characters in order to pass it through url. java.net.URLEncoder has encode() and decode() method to perform this task.
+
+Q15) Why is HTTP called stateless? How do you mantain user sessions on the server?
+
+A stateless protocol is a communication protocol in which no session information is retained for each session. HTTP is called stateless because for every request, the application is able to process every individual request regardless. To maintain user sessions, web container will generate a session ID to a new request from a new user that will be valid for sometime through the response, then for the the following request, the user’s machine will append the session ID onto every request.
+
+How can you maintain a user session on the client side? Advantages and disadvantages?
+
+Maintaining user session on the client side can be done by using cookies or by encoding it in the url. Some of the advantages and disadvantages of this includes 
+	client sessions can survive a server crash
+	cookies may be readable by unauthorized users	
+	Client-side data can be modified
+	Greatly increased communication overhead
+	Limited data size.
+
+How can you start a new session killing old session? Demonstrate with example
+
+To kill a session, we can use request.getSession().invalidate(). This will make the current session to be invalid, thus when a new request comes in, the controller will generate new session.
+
+What do you mean by a filter in servlets. Explain the use cases where it can be helpful
+
+Filter in servlet is a class that is used to intercept a request and configure actions to do before sending the request to the servlet and before sending the response back to the user. For example, if we want a group of servlet that start with urlpatterns “/needsfilter/<servlet-name>”, and these servlet can only be accessible if the session contains attribute of “loggedIn” to be true, then we can filter all url that match this pattern “/needsfilter/*” and check if the attribute is set to true, if not then we won’t let the request to be forwarded to the servlet.
+
+What do you understand by load-on-startup?
+
+A servlet will be loaded and initialize upon first request, by specifying load-on-startup on a servlet, that servlet will be loaded when the server is deployed, so the first request will not spend more time to get the response.
+
+Write a servlet to upload a file on the server.
+
+///////////
+
+What do you mean by a connection pool? How were you maintaining a connection pool in your application? 
+
+Connection pool is a way to keep multiple connection to a resource such as database available. Typically when we need to use connection, we can have a method that ask for connection from the connection pool, thus we do not have to instantiate a new connection for every request.
+Tomcat jdbc is a library that is used to maintain connection pool. 
+
+Q22) How to get the IP address of client in servlet?
+
+request.getRemoteAddr()
+
+Lab 1.1, 2.1
+
+////////////
+
+what is the difference between web server, web container and a servlet? Give 3 examples of web servers
+
+Examples of web servers: Tomcat, Jetty, and Glassfish
+
+Name the different HTTP methods
+
+GET, POST, PUT, OPTIONS, HEAD, DELETE, TRACE
+
+What do you mean by the static content and dynamic content?
+
+Static content is when the context of user does not affect our pages. Dynamic content means that for every request, there will be unique response following the request. 
+
+Why HTTPServlet is abstract?
+
+HTTPServlet is abstract because there is no implementation of some of the method such as doGet, doPost, and other, so we do not want to create an instance of it, and so that every servlet that extends HTTPServlet will have to override at least one of the method.
+
+What is the difference between a war file and a jar file?
+
+War files and jar files are both java archive files which contains java classes. Jar file is used when we are creating a java application, whereas war file is used when we are creating a java web application
+
+What information is part of HttpRequest and HttpResponse. List few methods of these interfaces.
+
+Request contains session id, cookies, header 
+Response contains writer 
+
+Q30)What is the difference between request.getParameter("") and request.getParameterValues(""). When to use which?
+
+request.getParameter(“”) will return the corresponding value for the argument, if there are multiple values passed using the same key, it will return the first one, whereas request.getParameterValues(“”) will return a string array of every value that correspond with the parameter.
+
+Q31) Explain the various Http Status Codes. 
+
+Informational responses (100–199),
+Successful responses (200–299),
+Redirects (300–399),
+Client errors (400–499),
+and Server errors (500–599).
+
+Write the code to redirect page to google.com after 3 seconds.
+
+response.setHeader("Refresh", "3; URL=http://www.google.com");
+
+Q33) What is the difference between request, session and application scope? How do you set fields in these scopes using a servlet? Give practical implementation for these scopes, when to use which
+
+Request scope means the range of visibility of some properties only limited to each request. Session scope mans that it’s limited to each session, and application scope is limited to the whole application. Request scope is limited to every request, for example, a request parameters are only accessible for each request. Session object has a getter and setter method for its attribute, in which can be accessible within the same session, thus this attribute has the session scope. ServletContext is a configuration file that can be access using getServletContext(), similar to Session, it contains attributes that can be set and get, this attribute of ServletContext has an application scope, meaning it can be accessible thru different servlet.
+
+Q34) What is the difference between request.getParameter and request.getAttribute?
+
+Http allows request to include user specific information, in case of post, it can be put in the body, and in case of get, it can be put by appending it to the url using key-value pair. This information can be retrieved using request.getParameter by specifying the key. 
+
+Why do we need sessions?
+
+Logically a session begins with the first connection to an application by a client and ends after that client’s last connection. Since Http is stateless we need a mechanism to maintain state across pages.
+
+Q36) How can we set a timeout for cookie and a session?
+
+cookie.setMaxAge();
+request.getSession().setMaxInactiveInterval()
+
+--------------------JDBC--------------------------
+
+Q37) What is a transaction? How do you manage transactions in your application?
+
+Transaction is a set of actions to be carried out as a single, atomic action. In one transaction, every step of the transaction will either are carried out or none of them are. This is used to maintain the integrity of the application. For example, we want to transfer $100 from A to B, then we have to draw $100 from A’s account then add it to B. If the connection got lost when we try to add the money to account B, then the $100 will disappear. If we do it in one transaction, then if anything happen, we can rollback() and it will be as if we never did anything to the database, but if it is successful, then we have to explicitly do commit(), to finalize the transaction. By default, auto commit is set to be true, so for every statement it will automatically commit the result, but to maintain a transaction, we have to make sure that auto commit is disabled.
+
+Q38) What is the difference between statement and preparedStatement?
+
+preparedStatement will cache the SQL query in the DB-side which provide overall better performance, it can take object as a parameter, thus allowing non-standard java object such as Date, Time, and InputStream. Steps for an sql statement to be processed is 
+	- parse the incoming SQL query
+	- Compile the SQL query
+	- Plan/optimize the data acquisition path
+	- Execute the optimized query / acquire and return data
+The first 3 steps are pre-executed by using preparedStatement
+
+
+Q39) What is the difference between execute(), executeQuery() and executeUpdate() methods of a statement? 
+
+execute() is used mostly for ddl statement, it will return multiple value, but the method will return boolean.
+executeUpdate() is for dml statements, it will return the number of rows got modified
+executeQuery() is for dql statements, it will return a ResultSet object and we can get the result per row.
+
+What is the difference between using Class.forName to load a  class or loading it by creating an object/ calling a static method of a class?
+
+When we do Class.forName(), compiler will not check if the class exists, thus it might result in ClassNotFoundException, but if we create an object/call a static method of a class, the compiler will check if the class is in the scope of our application. If not, then it will throw an error.
+
+What is the SQLException? Checked or unchecked? How do you handle this kind of exception in your servlet application?
+
+SQLException is an exception thrown when we are executing statements using the java.sql library and got an error. It is a checked exception, thus we must handle it if it is thrown. In a servlet application, we must catch the SQLException using try catch block and respond with a particular response following the error.
+
+---------------------Java----------------------------
+
+Q42) How can you read a property file in the application?
+
+Java has provided a class in java.util called Properties. The instance of this class will able to load properties file and get each properties using their keys. 
+
+What is a checked exception and unchecked exception?
+
+Checked exception are an exception that required to be handled by method that called it. Compiler will show an error message if a method is throwing an exception but the caller not handle it. Checked exceptions are child of exception class.
+
+Unchecked exception is thrown during runtime. A caller does not need to handle unchecked exception nor to have it explicitly in the method declaration. Unchecked exception can be created by extending RuntimeException. Thus, existing exception such as ArrayOutOfBoundsException, NumberFormatException, among others which extends RuntimeException is an unchecked exception
+
+Name few design patterns you used in your application.. Where?
+
+Singleton, Dependency Injection Pattern -> using interfaces,
+
+What do you mean by SOLID design pattern? Explain with examples
+
+Single Responsibility Principle
+	A class should have one and only one reason to change, meaning that a class should have only one job
+
+Open/Closed Principle
+	Objects or entities should be open for extension, but closed for modification
+
+Liskov Substitution Principle
+	Let q(x) be a property provable about objects of x of type T. Then q(y) should be provable for objects y of type S where S is a subtype of T
+
+Interface Segregation Principle
+	A client should never be forced to implement an interface that it doesn't use or clients shouldn't be forced to depend on methods they do not use
+
+Dependency Inversion
+	Entities must depend on abstractions not on concretions. It states that the high level module must not depend on the low level module, but they should depend on abstractions
