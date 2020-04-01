@@ -35,6 +35,6 @@ public class LoginServlet extends HttpServlet {
             response.getWriter().write(respond);
         }
 
-        response.sendRedirect("account/home");
+        response.sendRedirect("calculatebill");
     }
 }
