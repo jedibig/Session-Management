@@ -25,6 +25,13 @@ public class AdminHomeServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer priviledge = (Integer) request.getSession().getAttribute("priviledge");
+        if (priviledge == null || priviledge <= 0){
+            logger.info("Not enough priviledge to access admin page.");
+            request.getSession().invalidate();
+            response.getWriter().write("<html>You do not have priviledge. <a href='/SessionManagement'>Click here</a> to go back to login page<html>");
+            return;
+        }
         long cNum = Long.parseLong(request.getParameter("cNum"));
         double prevRead = Double.parseDouble(request.getParameter("prevRead"));
         double currRead = Double.parseDouble(request.getParameter("currRead"));
@@ -37,10 +44,15 @@ public class AdminHomeServlet extends HttpServlet {
         String htmlResponse = "<html>";
         try {
             bill = eBillService.calculateBill(bill);
+            htmlResponse += "<h4>Welcome " + request.getSession().getAttribute("username") + "</h4><br/><br/>";
+            htmlResponse += "<h1>Electricity Bill for Consumer Number - " + bill.getCustomerNum() + " is</h1><br/><br/>";
+            htmlResponse += "<h2>Unit Consumed:: " + bill.getUnitConsumed() + "</h2><br/>";
+            htmlResponse += "<h2>Net Amount:: Rs." + bill.getNetAmount() + "</h2><br/><br/>";
         } catch (DatabaseException e) {
             e.printStackTrace();
+            htmlResponse += "An error happened on our end. Please try again later.";
         } catch (NoAccountFoundException e) {
-            e.printStackTrace();
+            htmlResponse += "Invalid Consumer Number.";
         }
 
         htmlResponse += "</html>";
@@ -53,12 +65,12 @@ public class AdminHomeServlet extends HttpServlet {
         Integer priviledge = (Integer) request.getSession().getAttribute("priviledge");
         if (priviledge == null || priviledge <= 0){
             logger.info("Not enough priviledge to access admin page.");
-            response.getWriter().write("<html>You do not have priviledge. <a href='login'>Click here</a> to go back to login page<html>");
+            response.getWriter().write("<html>You do not have priviledge. <a href='/SessionManagement'>Click here</a> to go back to login page<html>");
             return;
         }
 
         String htmlResponse = "<html><form action='calculatebill' method='post'>";
-        htmlResponse += "Consumer Number:<input type='number' pattern='[1-9]\\d{5}' required name='cNum'><br/>";
+        htmlResponse += "Consumer Number:<input type='text' pattern='[1-9]\\d{5}' required name='cNum'><br/>";
         htmlResponse += "Last Month Meter Reading:<input type='number' min=\"0.00\" max=\"10000.00\" step=\"0.01\" required name='prevRead'><br/>";
         htmlResponse += "Current Month Meter Reading:<input type='number' min=\"0.00\" max=\"10000.00\" step=\"0.01\" required name='currRead'><br/>";
         htmlResponse += "<input type='submit' value='Calculate Bill'>";

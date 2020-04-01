@@ -27,10 +27,14 @@ public class EBillDAOImpl implements EBillDAO{
             ps1.setDouble(4,bill.getNetAmount());
             ps1.setDate(5,bill.getBillDate());
 
+            logger.info("Executing query.");
             if ( ps1.executeUpdate() <= 0 ){
-                return 1;
+                return -1;
             }
+            connection.commit();
         } catch (SQLException e) {
+            if (e.getErrorCode() == 2291)
+                return 1;
             e.printStackTrace();
                 return -1;
         }

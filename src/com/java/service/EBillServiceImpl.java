@@ -21,7 +21,7 @@ public class EBillServiceImpl implements EBillService {
     }
     @Override
     public Bill calculateBill(Bill bill) throws NoAccountFoundException, DatabaseException {
-        double unitConsumed = bill.getPrevReading() - bill.getCurrReading();
+        double unitConsumed = bill.getCurrReading() - bill.getPrevReading();
         double netAmount = unitConsumed * 1.15 + FIXED_CHARGE;
 
         bill.setUnitConsumed(unitConsumed);
